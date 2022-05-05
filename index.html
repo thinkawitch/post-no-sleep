@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>POST with no sleep</title>
+    <script src="NoSleep.min.js"></script>
+</head>
+<body>
+
+<h3>Do http POST on mobile phone with no sleep</h3>
+
+<form method="post" action="handler.php">
+    <input type="text" name="first_name" placeholder="First name" />
+    <input type="text" name="last_name" placeholder="Last name" />
+    <br style="margin-bottom: 1rem" />
+    Handler time:
+    <select name="minutes">
+        <option value="5">5 mins</option>
+        <option value="6">6 mins</option>
+        <option value="7">7 mins</option>
+        <option value="8">8 mins</option>
+        <option value="9">9 mins</option>
+        <option value="10" selected>10 mins</option>
+        <option value="15">15 mins</option>
+    </select>
+    <br style="margin-bottom: 1rem" />
+    <button type="submit">Submit</button>
+</form>
+<br/>
+<label style="margin-top: 1rem"></label>
+
+<script>
+    let startDate = null;
+    const noSleep = new NoSleep();
+    const form = document.querySelector('form');
+    const button = document.querySelector('[type=submit]');
+    const label = document.querySelector('label');
+
+    form.addEventListener('submit', () => {
+        startDate = new Date();
+        noSleep.enable();
+        if (navigator.vendor && !navigator.vendor.match(/apple/i)) setInterval(updateTime, 500); // safari does not update UI during submit
+        button.innerText = 'posting...';
+        button.disabled = true;
+    });
+
+    function updateTime() {
+        let seconds = Math.round((new Date() - startDate) / 1000);
+        label.innerText = '' + seconds + 's';
+    }
+</script>
+
+</body>
+</html>
